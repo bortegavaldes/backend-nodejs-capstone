@@ -53,6 +53,9 @@ app.get("/",(req,res)=>{
     res.send("Inside the server")
 })
 
+// Serve uploaded files using express.static middleware
+app.use('/images', express.static('public/images'));
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
