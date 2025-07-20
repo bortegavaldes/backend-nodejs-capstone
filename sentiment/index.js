@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express')
-const axios = require('axios')
 const logger = require('./logger')
 const expressPino = require('express-pino-logger')({ logger })
 
@@ -14,7 +13,7 @@ app.use(expressPino)
 
 // Define the sentiment analysis route
 app.post('/sentiment', async (req, res) => {
-  const { sentence }  = req.query
+  const { sentence } = req.query
   if (!sentence) {
     logger.error('No sentence provided')
     return res.status(400).json({ error: 'No sentence provided' })
@@ -31,9 +30,9 @@ app.post('/sentiment', async (req, res) => {
 
     let sentiment = 'neutral'
 
-    if (analysisResult < 0 ){
-      sentiment = 'negative' 
-    }else if (analysisResult > 0.33){
+    if (analysisResult < 0) {
+      sentiment = 'negative'
+    } else if (analysisResult > 0.33) {
       sentiment = 'positive'
     }
 
@@ -43,7 +42,7 @@ app.post('/sentiment', async (req, res) => {
     res.status(200).json({ sentimentScore: analysisResult, sentiment })
   } catch (error) {
     logger.error(`Error performing sentiment analysis: ${error}`)
-    res.status(500).json({'message': 'Error performing sentiment analysis'})
+    res.status(500).json({ message: 'Error performing sentiment analysis' })
   }
 })
 
