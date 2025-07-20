@@ -8,12 +8,12 @@ const pino = require('pino')
 
 const logger = pino()
 
-//Create JWT secret
+// Create JWT secret
 const JWT_SECRET = process.env.JWT_SECRET
 
 router.post('/register', async (req, res) => {
   try {
-    //Connect to `secondChance` in MongoDB through `connectToDatabase` in `db.js`.
+    // Connect to `secondChance` in MongoDB through `connectToDatabase` in `db.js`.
     const db = await connectToDatabase()
     const collection = db.collection('users')
     const existingEmail = await collection.findOne({ email: req.body.email })
@@ -51,31 +51,31 @@ router.post('/login', async (req, res) => {
   try {
     // connect to `secondChance` in MongoDB through `connectToDatabase`
     const db = await connectToDatabase()
-    //Access MongoDB `users` collection
+    // Access MongoDB `users` collection
     const collection = db.collection('users')
-    //Check for user credentials in database
+    // Check for user credentials in database
     const theUser = await collection.findOne({ email: req.body.email })
-    //Check if the password matches
+    // Check if the password matches
     if (theUser) {
-      let result = await bcryptjs.compare(req.body.password, theUser.password)
-      //send appropriate message if mismatch
+      const result = await bcryptjs.compare(req.body.password, theUser.password)
+      // send appropriate message if mismatch
       if (!result) {
         logger.error('Passwords do not match')
         return res.status(404).json({ error: 'Wrong pasword' })
       }
-      //Fetch user details
-      let payload = {
+      // Fetch user details
+      const payload = {
         user: {
           id: theUser._id.toString()
         }
       }
       const userName = theUser.firstName
       const userEmail = theUser.email
-      //Create JWT authentication if passwords match
+      // Create JWT authentication if passwords match
       const authtoken = jwt.sign(payload, JWT_SECRET)
       logger.info('User logged in successfully')
       return res.status(200).json({ authtoken, userName, userEmail })
-      //Send appropriate message if user not found
+      // Send appropriate message if user not found
     } else {
       logger.error('User not found')
       return res.status(404).json({ error: 'User not found' })
@@ -86,7 +86,7 @@ router.post('/login', async (req, res) => {
   }
 })
 
-const { body, validationResult } = require('express-validator')
+const { validationResult } = require('express-validator')
 
 router.put('/update', async (req, res) => {
   const errors = validationResult(req)
@@ -120,7 +120,7 @@ router.put('/update', async (req, res) => {
 
     const payload = {
       user: {
-        id: updatedUser._id.toString(),
+        id: updatedUser._id.toString()
       }
     }
     const authtoken = jwt.sign(payload, JWT_SECRET)
