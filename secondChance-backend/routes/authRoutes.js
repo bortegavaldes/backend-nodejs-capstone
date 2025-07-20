@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
   try {
     //Connect to `secondChance` in MongoDB through `connectToDatabase` in `db.js`.
     const db = await connectToDatabase()
-    const collection = db.collection("users")
+    const collection = db.collection('users')
     const existingEmail = await collection.findOne({ email: req.body.email })
     if (existingEmail) {
       logger.error('Email id already exists')
@@ -47,12 +47,12 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-  console.log("\n\n Inside login")
+  console.log('\n\n Inside login')
   try {
     // connect to `secondChance` in MongoDB through `connectToDatabase`
     const db = await connectToDatabase()
     //Access MongoDB `users` collection
-    const collection = db.collection("users")
+    const collection = db.collection('users')
     //Check for user credentials in database
     const theUser = await collection.findOne({ email: req.body.email })
     //Check if the password matches
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
       //Fetch user details
       let payload = {
         user: {
-          id: theUser._id.toString(),
+          id: theUser._id.toString()
         }
       }
       const userName = theUser.firstName
@@ -99,15 +99,15 @@ router.put('/update', async (req, res) => {
     const email = req.headers.email
     if (!email) {
       logger.error('Email not found in the request headers')
-      return res.status(400).json({ error: "Email not found in the request headers" })
+      return res.status(400).json({ error: 'Email not found in the request headers' })
     }
     const db = await connectToDatabase()
-    const collection = db.collection("users")
+    const collection = db.collection('users')
 
     const existingUser = await collection.findOne({ email })
     if (!existingUser) {
       logger.error('User not found')
-      return res.status(404).json({ error: "User not found" })
+      return res.status(404).json({ error: 'User not found' })
     }
     existingUser.firstName = req.body.firstName
     existingUser.updatedAt = new Date()
@@ -128,7 +128,7 @@ router.put('/update', async (req, res) => {
     res.json({ authtoken })
   } catch (error) {
     logger.error(error)
-    return res.status(500).send("Internal Server Error")
+    return res.status(500).send('Internal Server Error')
   }
 })
 
