@@ -11,11 +11,11 @@ router.get('/', async (req, res, next) => {
     const collection = db.collection(process.env.MONGO_COLLECTION)
 
     // Initialize the query object
-    let query = {}
+    const query = {}
 
     // Add the name filter to the query if the name parameter is not empty
     if (req.query.name && req.query.name.trim() !== '') {
-      query.name = { $regex: req.query.name, $options: "i" } // Using regex for partial match, case-insensitive
+      query.name = { $regex: req.query.name, $options: 'i' } // Using regex for partial match, case-insensitive
     }
 
     if (req.query.category) {
