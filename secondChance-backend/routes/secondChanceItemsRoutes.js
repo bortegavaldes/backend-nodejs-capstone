@@ -1,14 +1,12 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const router = express.Router();
-const connectToDatabase = require('../models/db');
-const logger = require('../logger');
-require('dotenv').config();
+const express = require('express')
+const multer = require('multer')
+const router = express.Router()
+const connectToDatabase = require('../models/db')
+const logger = require('../logger')
+require('dotenv').config()
 
 // Define the upload directory path
-const directoryPath = 'public/images';
+const directoryPath = 'public/images'
 
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
@@ -20,12 +18,12 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: storage });
-const db_col = `${process.env.MONGO_COLLECTION}`;
+const upload = multer({ storage: storage })
+const db_col = `${process.env.MONGO_COLLECTION}`
 
 // Get all secondChanceItems
 router.get('/', async (req, res, next) => {
-    logger.info('/ called');
+    logger.info('/ called')
     try {
         const db = await connectToDatabase();
         const collection = db.collection(db_col);
@@ -89,7 +87,7 @@ router.put('/:id', async (req, res, next) => {
         secondChanceItem.condition = req.body.condition;
         secondChanceItem.age_days = req.body.age_days;
         secondChanceItem.description = req.body.description;
-        secondChanceItem.age_years = Number((secondChanceItem.age_days/365).toFixed(1));
+        secondChanceItem.age_years = Number((secondChanceItem.age_days / 365).toFixed(1));
         secondChanceItem.updatedAt = new Date();
 
         const updatepreloveItem = await collection.findOneAndUpdate(
@@ -98,10 +96,10 @@ router.put('/:id', async (req, res, next) => {
             { returnDocument: 'after' }
         );
 
-        if(updatepreloveItem) {
-            res.json({"uploaded":"success"});
+        if (updatepreloveItem) {
+            res.json({ "uploaded": "success" });
         } else {
-            res.json({"uploaded":"failed"});
+            res.json({ "uploaded": "failed" });
         }
 
     } catch (e) {
@@ -121,7 +119,7 @@ router.delete('/:id', async (req, res, next) => {
             return res.status(404).json({ error: "secondChanceItem not found" });
         }
         await collection.deleteOne({ id });
-        res.json({"deleted":"success"});
+        res.json({ "deleted": "success" });
     } catch (e) {
         next(e);
     }
