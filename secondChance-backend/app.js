@@ -1,5 +1,5 @@
 require('dotenv').config()
-require("./util/import-mongo/index")
+require('./util/import-mongo/index')
 const express = require('express')
 const cors = require('cors')
 const pinoLogger = require('./logger')
