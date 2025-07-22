@@ -38,7 +38,7 @@ async function loadData () {
   } catch (err) {
     console.error(err)
   } finally {
-    // Close the connection
+    // Close connection
     await client.close()
   }
 }

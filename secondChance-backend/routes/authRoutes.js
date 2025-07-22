@@ -8,7 +8,6 @@ const pino = require('pino')
 
 const logger = pino()
 
-// Create JWT secret
 const JWT_SECRET = process.env.JWT_SECRET
 
 router.post('/register', async (req, res) => {
